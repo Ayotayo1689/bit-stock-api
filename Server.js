@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended: true}));
 
 
 
-app.get('/', (req, res) => {
+app.get('/',(req, res) => {
     res.status(201).json({
         message: 'welcome to bitstock api '
     })
