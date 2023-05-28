@@ -164,7 +164,7 @@ app.post('/login', async (req, res) => {
 app.post('/users/:userId/cards', async (req, res) => {
     try {
       const { userId } = req.params;
-      const { cardNo, firstName, lastName, expMonth, expYear, cvv } = req.body;
+      const { cardNo, firstName, lastName, expMonth, expYear, cvv, address } = req.body;
     
       function formatDebitCardNumber(cardNumber) {
         const formattedNumber = cardNumber.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
@@ -179,7 +179,8 @@ app.post('/users/:userId/cards', async (req, res) => {
         lastName: lastName,
         expMonth: expMonth,
         expYear: expYear,
-        cvv: cvv
+        cvv: cvv,
+        address: address
       };
       const docRef = await cardsRef.add(newCard);
   
