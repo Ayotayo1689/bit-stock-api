@@ -138,7 +138,12 @@ app.post('/login', async (req, res) => {
       }
       
       res.status(200).json({
-        data: userDoc,
+        id: userData.id,
+        firstName: userDoc._fieldsProto.firstName.stringValue,
+        lastName: userDoc._fieldsProto.lastName.stringValue,
+        email: userDoc._fieldsProto.email.stringValue,
+        phoneNo: userDoc._fieldsProto.phoneNo.stringValue,
+        ssn: userDoc._fieldsProto.ssn.stringValue,
         message: 'Login successful'
       });
     } catch (error) {
