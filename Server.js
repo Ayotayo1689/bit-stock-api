@@ -37,10 +37,11 @@ app.post('/users', async (req, res) => {
         email: email,
         phoneNo: phoneNo,
         ssn: ssn,
+        cardId: "",
         password: password
       };
       const docRef = await usersRef.add(newUser);
-      res.status(201).json({ id: docRef.id ,
+      res.status(201).json({ id: newUser,
         message: 'User created sucessfully'
     });
     } catch (error) {
@@ -144,6 +145,7 @@ app.post('/login', async (req, res) => {
         email: userDoc._fieldsProto.email.stringValue,
         phoneNo: userDoc._fieldsProto.phoneNo.stringValue,
         ssn: userDoc._fieldsProto.ssn.stringValue,
+        cardId: userDoc._fieldsProto.cardId.stringValue,
         message: 'Login successful'
       });
     } catch (error) {
@@ -152,26 +154,24 @@ app.post('/login', async (req, res) => {
     }
   });
   
-//   CHiGyDEy6789lktgqb19
-// CHiGyDEy6789lktgqb19
 
 
 
 
+//   R8vY0KX5HGPRirN8m868
 
 // Define a route to register a card to a user
 app.post('/users/:userId/cards', async (req, res) => {
     try {
       const { userId } = req.params;
       const { cardNo, firstName, lastName, expMonth, expYear, cvv } = req.body;
-      
-function formatDebitCardNumber(cardNumber) {
-    const formattedNumber = cardNumber.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
-    return formattedNumber;
-  }
-  
-  
-  const formattedCardNumber = formatDebitCardNumber(cardNo);
+    
+      function formatDebitCardNumber(cardNumber) {
+        const formattedNumber = cardNumber.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
+        return formattedNumber;
+      }
+    
+      const formattedCardNumber = formatDebitCardNumber(cardNo);
       const cardsRef = admin.firestore().collection(`classes/${userId}/cards`);
       const newCard = {
         cardNo: formattedCardNumber,
@@ -182,13 +182,46 @@ function formatDebitCardNumber(cardNumber) {
         cvv: cvv
       };
       const docRef = await cardsRef.add(newCard);
-      res.status(201).json({ id: docRef.id,
-        message: `card registered sucessfully ${formattedCardNumber}` });
+  
+      if (docRef) {
+        try {
+          const cardId = docRef.id;
+          const userRef = admin.firestore().collection('users').doc(userId);
+          
+          // Update only the cardId field
+          await userRef.update({ cardId: cardId });
+          
+          res.status(200).json({ message: 'CardId registered successfully' });
+        } catch (error) {
+          console.error('Error updating cardId:', error);
+          res.status(500).json({ error: 'Failed to update cardId' });
+        }
+      } else {
+        res.status(200).json({ message: 'success' });
+      }
     } catch (error) {
-      console.error('Error registering Card:', error);
-      res.status(500).json({ error: 'Failed to register Card' });
+      console.error('Error creating card:', error);
+      res.status(500).json({ error: 'Failed to create card' });
     }
   });
+  
+   
+      
+
+
+
+
+
+
+
+
+    //   res.status(201).json({ id: docRef.id,
+        // message: `card registered sucessfully ${formattedCardNumber}` });
+    // catch (error) {
+    //   console.error('Error registering Card:', error);
+    //   res.status(500).json({ error: 'Failed to register Card' });
+    // }
+//   });
 
 //get card by id 
 app.get('/users/:userId/cards/:cardId', async (req, res) => {
