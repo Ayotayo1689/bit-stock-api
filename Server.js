@@ -138,9 +138,7 @@ app.post('/login', async (req, res) => {
       }
       
       res.status(200).json({
-        id: userDoc.id,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+        data: userDoc,
         message: 'Login successful'
       });
     } catch (error) {
