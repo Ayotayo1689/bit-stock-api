@@ -3,6 +3,11 @@ const app = express();
 const admin = require("firebase-admin");
 const credentials = require("./key.json");
 
+var cors = require('cors')
+
+app.use(cors())
+
+
 admin.initializeApp({
     credential: admin.credential.cert(credentials)
 });
