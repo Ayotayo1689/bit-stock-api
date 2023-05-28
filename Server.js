@@ -5,7 +5,7 @@ const credentials = require("./key.json");
 
 var cors = require('cors')
 
-app.use(cors())
+
 
 
 admin.initializeApp({
@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended: true}));
 
-
+app.use(cors())
 
 app.get('/',(req, res) => {
     res.status(201).json({
