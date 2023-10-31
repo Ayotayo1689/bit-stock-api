@@ -215,6 +215,7 @@ app.post('/users', async (req, res) => {
       isAdmin: false,
       password: password,
       department: department,
+      profilePic: "",
       tasks: [] ,
     };
     const docRef = await usersRef.add(newUser);
@@ -278,6 +279,23 @@ app.post('/users/:userId/add-task', async (req, res) => {
   }
 });
 
+app.put('/users/:userId/profile_pic', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { school } = req.body;
+
+    const userRef = admin.firestore().collection('users').doc(userId);
+
+    await userRef.update({ profilePic });
+
+    res.status(200).json({
+      message: 'picture updated successfully',
+    });
+  } catch (error) {
+    console.error('Error updating user picture:', error);
+    res.status(500).json({ error: 'Failed to update user picture' });
+  }
+});
 
 
 
