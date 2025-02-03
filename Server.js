@@ -1,24 +1,24 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const cloudinary = require('cloudinary').v2;
-const { config, utils } = cloudinary;
+// const cloudinary = require('cloudinary');
+// const { config, utils } = cloudinary;
 
 const admin = require("firebase-admin");
 const credentials = require("./key.json");
 // const cloudinary = require('cloudinary').v2;
 
-const multer = require('multer');
+// const multer = require('multer');
 // const upload = multer({ dest: 'uploads/' });
 const fs = require('fs')
 
 
 var cors = require('cors')
-config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
 
 // cloudinary.config({
 //   cloud_name: 'dpv7sfd09',
@@ -71,8 +71,8 @@ app.use(cors())
 
 // const upload = multer({ storage: storage });
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage });
 
 
 
@@ -328,14 +328,14 @@ app.put('/users/:userId/profile_pic', async (req, res) => {
     //   department: userData.department,
     // };
 
-//     // If an image was uploaded, upload it to Cloudinary
+    // If an image was uploaded, upload it to Cloudinary
 //     if (req.file) {
-//       const cloudinaryUpload = await cloudinary.uploader.upload(req.file.path);
+      // const cloudinaryUpload = await cloudinary.uploader.upload(req.file.path);
 
-//       // Add the Cloudinary image URL and other details to the task
+      // Add the Cloudinary image URL and other details to the task
 //       newTask.taskImage = {
-//         url: cloudinaryUpload.secure_url,
-//         publicId: cloudinaryUpload.public_id,
+        // url: cloudinaryUpload.secure_url,
+        // publicId: cloudinaryUpload.public_id,
 //         originalname: req.file.originalname,
 //         filename: req.file.filename,
 //         path: req.file.path,
@@ -352,15 +352,15 @@ app.put('/users/:userId/profile_pic', async (req, res) => {
 //     res.status(500).json({ error: 'Failed to add task' });
 //   }
 // });  
-const signUpload = async () => {
-  const timestamp = Math.round(new Date() / 1000); // Fix the typo in 'new Date()'
-  const params = {
-    timestamp: timestamp,
-  };
-  const signature = await cloudinary.utils.api_sign_request(params,"916184952314884","Nb-AINTtJsIfj9XeG6ICDiA1VYo_gY");
-  console.log(signature);
-  return { timestamp, signature };
-};
+// const signUpload = async () => {
+//   const timestamp = Math.round(new Date() / 1000); // Fix the typo in 'new Date()'
+//   const params = {
+//     timestamp: timestamp,
+//   };
+//   const signature = await cloudinary.utils.api_sign_request(params,"916184952314884","Nb-AINTtJsIfj9XeG6ICDiA1VYo_gY");
+//   console.log(signature);
+//   return { timestamp, signature };
+// };
 
 // console.log(cloudinary.config());
 
@@ -396,10 +396,10 @@ const signUpload = async () => {
 //       department: userData.department,
 //     };
 
-//     // If an image was uploaded, upload it to Cloudinary
+    // If an image was uploaded, upload it to Cloudinary
 //     if (req.file) {
 //       const { timestamp, signature } = await signUpload();
-//       const result = await cloudinary.uploader.upload(req.file.path, {
+      // const result = await cloudinary.uploader.upload(req.file.path, {
 //         folder: 'tasks', // Optional folder for organizing images
 //         timestamp: timestamp,
 //         signature: signature,
