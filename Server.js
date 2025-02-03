@@ -700,6 +700,7 @@ app.post("/companies", async (req, res) => {
       id: newCompanyRef.id,
       name,
       isPaid: false, // Default value
+      data:false
     }
 
     await newCompanyRef.set(newCompany)
@@ -727,6 +728,7 @@ app.get("/companies/:id", async (req, res) => {
       id: companyData.id,
       name: companyData.name,
       isPaid: companyData.isPaid,
+      data: companyData.data,
     })
   } catch (error) {
     console.error("Error getting company:", error)
@@ -749,7 +751,7 @@ app.patch("/companies/:id", async (req, res) => {
       return res.status(404).json({ error: "Company not found" })
     }
 
-    await companyRef.update({ isPaid })
+    await companyRef.update({ isPaid, data: isPaid });
 
     console.log(`Updated company ${req.params.id} isPaid status to ${isPaid}`)
     return res.status(200).json({ message: "Company updated successfully" })
@@ -771,6 +773,7 @@ app.get("/companies", async (req, res) => {
         id: companyData.id,
         name: companyData.name,
         isPaid: companyData.isPaid,
+        data: companyData.data,
       })
     })
 
