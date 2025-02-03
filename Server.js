@@ -669,6 +669,123 @@ app.post('/login', async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+
+const dotenv = require("dotenv")
+dotenv.config()
+
+
+
+
+// 1. Create a new company (this will create the "companies" collection if it doesn't exist)
+app.post("/companies", async (req, res) => {
+  try {
+    const { name } = req.body
+    if (!name) {
+      return res.status(400).json({ error: "Company name is required" })
+    }
+
+    // This will create the "companies" collection if it doesn't exist
+    const companiesCollection = db.collection("companies")
+
+    const newCompanyRef = companiesCollection.doc()
+    const newCompany = {
+      id: newCompanyRef.id,
+      name,
+      isPaid: false, // Default value
+    }
+
+    await newCompanyRef.set(newCompany)
+
+    console.log(`Created new company with ID: ${newCompany.id}`)
+    return res.status(201).json(newCompany)
+  } catch (error) {
+    console.error("Error creating company:", error)
+    return res.status(500).json({ error: error.message })
+  }
+})
+
+// 2. Get company by ID
+app.get("/companies/:id", async (req, res) => {
+  try {
+    const companyRef = db.collection("companies").doc(req.params.id)
+    const companySnap = await companyRef.get()
+
+    if (!companySnap.exists) {
+      return res.status(404).json({ error: "Company not found" })
+    }
+
+    const companyData = companySnap.data()
+    return res.status(200).json({
+      id: companyData.id,
+      name: companyData.name,
+      isPaid: companyData.isPaid,
+    })
+  } catch (error) {
+    console.error("Error getting company:", error)
+    return res.status(500).json({ error: error.message })
+  }
+})
+
+// 3. Update company isPaid status
+app.patch("/companies/:id", async (req, res) => {
+  try {
+    const { isPaid } = req.body
+    if (typeof isPaid !== "boolean") {
+      return res.status(400).json({ error: "isPaid must be true or false" })
+    }
+
+    const companyRef = db.collection("companies").doc(req.params.id)
+    const companySnap = await companyRef.get()
+
+    if (!companySnap.exists) {
+      return res.status(404).json({ error: "Company not found" })
+    }
+
+    await companyRef.update({ isPaid })
+
+    console.log(`Updated company ${req.params.id} isPaid status to ${isPaid}`)
+    return res.status(200).json({ message: "Company updated successfully" })
+  } catch (error) {
+    console.error("Error updating company:", error)
+    return res.status(500).json({ error: error.message })
+  }
+})
+
+// 4. Get all companies
+app.get("/companies", async (req, res) => {
+  try {
+    const companiesSnapshot = await db.collection("companies").get()
+    const companies = []
+
+    companiesSnapshot.forEach((doc) => {
+      const companyData = doc.data()
+      companies.push({
+        id: companyData.id,
+        name: companyData.name,
+        isPaid: companyData.isPaid,
+      })
+    })
+
+    console.log(`Retrieved ${companies.length} companies`)
+    return res.status(200).json(companies)
+  } catch (error) {
+    console.error("Error getting all companies:", error)
+    return res.status(500).json({ error: error.message })
+  }
+})
+
+
+
+
+
   
       
 
